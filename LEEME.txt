@@ -1,0 +1,30 @@
+# Caída Libre - archivos preparados
+
+## Archivos
+- `app.py`: panel público de Streamlit. Solo consulta la tabla `mediciones`.
+- `recolector.py`: se ejecuta en el Mac conectado físicamente al Arduino y envía los datos a Supabase.
+- `requirements.txt`: dependencias para ambos programas.
+- `.gitignore`: evita subir archivos locales de claves.
+
+## Configuración de Streamlit Cloud
+En Settings → Secrets:
+```toml
+SUPABASE_URL = "https://TU-PROYECTO.supabase.co"
+SUPABASE_PUBLISHABLE_KEY = "TU_PUBLISHABLE_KEY"
+```
+
+## Configuración en el Mac del recolector
+Usar una Supabase Secret key (o service_role legacy) SOLO en el Mac local; nunca subirla a GitHub ni pegarla en el código.
+
+En Terminal:
+```bash
+export SUPABASE_URL="https://TU-PROYECTO.supabase.co"
+export SUPABASE_SECRET_KEY="TU_SECRET_KEY"
+python3 -m pip install -r requirements.txt
+python3 recolector.py
+```
+
+El Arduino debe enviar una línea JSON por medición, con las claves:
+`tiempo`, `velocidad`, `gravedad`.
+
+La tabla `public.mediciones` debe tener las columnas `tiempo`, `velocidad`, `gravedad` y `created_at` con valor predeterminado `NOW()`.
